@@ -1,18 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
-import { cart, order, product } from '../data-type';
+import { ApiResponse, cart, order, product } from '../data-type';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
   cartData = new EventEmitter<product[] | []>();
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
+
   addProduct(data: product) {
     return this.http.post('http://localhost:3000/products', data);
   }
-  productList() {
-    return this.http.get<product[]>('http://localhost:3000/products');
+
+  productList(page: number = 1, limit: number = 10) {
+    return this.http.get<ApiResponse>(`https://dummyjson.com/products?limit=${limit}&skip=${(page - 1) * limit}`);
   }
 
   deleteProduct(id: number) {
@@ -20,7 +23,7 @@ export class ProductService {
   }
 
   getProduct(id: string) {
-    return this.http.get<product>(`http://localhost:3000/products/${id}`);
+    return this.http.get<product>(`https://dummyjson.com/products/${id}`);
   }
 
   updateProduct(product: product) {
@@ -30,11 +33,11 @@ export class ProductService {
     );
   }
   popularProducts() {
-    return this.http.get<product[]>('http://localhost:3000/products?_limit=3');
+    return this.http.get<product[]>('https://dummyjson.com/products?limit=10&skip=0');
   }
 
   trendyProducts() {
-    return this.http.get<product[]>('http://localhost:3000/products?_limit=8');
+    return this.http.get<product[]>('https://dummyjson.com/products?limit=10&skip=0');
   }
 
   searchProduct(query: string) {
@@ -105,8 +108,8 @@ export class ProductService {
     })
   }
 
-  cancelOrder(orderId:number){
-    return this.http.delete('http://localhost:3000/orders/'+orderId)
+  cancelOrder(orderId: number) {
+    return this.http.delete('http://localhost:3000/orders/' + orderId)
 
   }
 

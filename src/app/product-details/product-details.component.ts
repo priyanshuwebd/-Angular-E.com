@@ -19,7 +19,8 @@ export class ProductDetailsComponent implements OnInit {
     let productId= this.activeRoute.snapshot.paramMap.get('productId');
     console.warn(productId);
     productId && this.product.getProduct(productId).subscribe((result)=>{
-      this.productData= result;
+      console.log("result", result)
+      this.productData = result;
       let cartData= localStorage.getItem('localCart');
       if(productId && cartData){
         let items = JSON.parse(cartData);

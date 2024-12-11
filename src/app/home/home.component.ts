@@ -8,17 +8,27 @@ import { ProductService } from '../services/product.service';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
- popularProducts:undefined|product[];
- trendyProducts:undefined | product[];
-  constructor(private product:ProductService) {}
+  productList: product[] = [];// Initialize as an empty array
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+
+  constructor(private productService: ProductService) { }
 
   ngOnInit(): void {
-    this.product.popularProducts().subscribe((data)=>{
-      this.popularProducts=data;
-    })
 
-    this.product.trendyProducts().subscribe((data)=>{
-      this.trendyProducts=data;
-    })
+
+    this.productService.productList().subscribe({
+      next: (data) => {
+        console.log(data.products); // Verify structure of response
+        this.productList = data.products; // Extract the 'products' array
+      },
+
+      error: (err) => {
+        console.error('Error fetching products:', err);
+      },
+    });
+  }
+  fetchProducts() {
+    throw new Error('Method not implemented.');
   }
 }

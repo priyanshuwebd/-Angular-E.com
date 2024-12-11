@@ -32,10 +32,20 @@ export class SellerHomeComponent implements OnInit {
   }
 
   list() {
-    this.product.productList().subscribe((result) => {
-      if (result) {
-        this.productList = result;
-      }
-    });
+    // this.product.productList().subscribe((result) => {
+    //   if (result) {
+    //     this.productList = result;
+    //   }
+    // });
+
+    // this.productService.productList().subscribe({
+    //   next: (data) => {
+    //     console.log(data.products); // Verify structure of response
+    //     this.productList = data.products; // Extract the 'products' array
+    //   },
+    //   error: (err) => {
+    //     console.error('Error fetching products:', err);
+    //   },
+    // });
   }
 }
