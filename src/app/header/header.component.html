@@ -10,13 +10,9 @@
     <!-- User Menu -->
     <ul *ngSwitchCase="'user'" class="user-menu">
       <li><a routerLink="/">Home</a></li>
-      <li 
-        class="dropdown-container" 
-        (mouseenter)="showDropdown = true" 
-        (mouseleave)="showDropdown = false"
-      >
+      <li class="dropdown-container" (mouseenter)="showDropdown = true" (mouseleave)="showDropdown = false">
         <div class="avatar-wrapper">
-          <img src="assets/avatar.png" alt="User Avatar" class="avatar" />
+          <img [src]="userImage || 'assets/default-avatar.png'" alt="User Avatar" class="avatar" />
         </div>
         <div class="dropdown-menu" *ngIf="showDropdown">
           <p>{{ userName | titlecase }}</p>

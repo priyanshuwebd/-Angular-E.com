@@ -10,6 +10,7 @@ import { ProductService } from '../services/product.service';
 export class HeaderComponent implements OnInit {
   menuType: string = 'default';
   userName: string = "";
+  userImage: string = ""
   showDropdown: boolean = false;
   constructor(private route: Router, private product: ProductService) { }
 
@@ -20,6 +21,7 @@ export class HeaderComponent implements OnInit {
           let userStore = localStorage.getItem('user');
           let userData = userStore && JSON.parse(userStore);
           this.userName = userData.firstName + " " + userData.lastName;
+          this.userImage = userData.image
           console.log("userName", this.userName)
           this.menuType = 'user';
         } else {
@@ -27,10 +29,6 @@ export class HeaderComponent implements OnInit {
         }
       }
     });
-  }
-
-  logout() {
-    this.route.navigate(['/'])
   }
 
   userLogout() {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { cart, product } from '../data-type';
+import { product } from '../data-type';
 import { ProductService } from '../services/product.service';
 
 @Component({
@@ -17,22 +17,11 @@ export class ProductDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     let productId = this.activeRoute.snapshot.paramMap.get('productId');
-    console.warn(productId);
+    console.log(productId);
     productId && this.product.getProduct(productId).subscribe((result) => {
       console.log("result", result)
       this.productData = result;
-      let cartData = localStorage.getItem('localCart');
-      if (productId && cartData) {
-        let items = JSON.parse(cartData);
-        items = items.filter((item: product) => productId === item.id.toString());
-        if (items.length) {
-          this.removeCart = true
-        } else {
-          this.removeCart = false
-        }
-      }
     })
-
   }
 
   handleQuantity(val: string) {

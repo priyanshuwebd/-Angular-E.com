@@ -10,7 +10,6 @@ import { Observable } from 'rxjs';
 export class ProductService {
   constructor(private http: HttpClient) { }
 
-
   productList(page: number = 1, limit: number = 10): Observable<ApiResponse> {
     const skip = (page - 1) * limit;
     return this.http.get<ApiResponse>(`https://dummyjson.com/products?limit=${limit}&skip=${skip}`);
@@ -22,7 +21,6 @@ export class ProductService {
     );
   }
   
-
   getProduct(id: string) {
     return this.http.get<product>(`https://dummyjson.com/products/${id}`);
   }
