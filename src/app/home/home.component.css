@@ -1,14 +1,15 @@
-.product-header-image{
+.product-header-image {
     object-fit: contain;
     width: 100%;
     height: 600px;
 }
-.product-item{
+
+.product-item {
     margin-bottom: 40px;
     border: 1px solid #ccc;
 }
 
-.product-item img{
+.product-item img {
     width: 100%;
     height: 300px;
     object-fit: contain;
@@ -20,15 +21,62 @@
     padding: 15px;
 }
 
-.product-item .name-head{
+.product-item .name-head {
     font-size: 20px;
     font-weight: 600;
 }
-.product-item h6{
+
+.product-item h6 {
     text-align: center;
 }
-.product-item .product-footer{
+
+.product-item .product-footer {
     display: flex;
     justify-content: space-between;
     padding: 10px;
+}
+
+@media (max-width: 768px) {
+    .product-item {
+        width: 100%;
+        /* Full width for small screens */
+        margin-bottom: 20px;
+        /* Margin between items */
+    }
+
+    .pagination-wrapper {
+        text-align: center;
+        /* Center pagination on smaller screens */
+    }
+
+    .search-bar {
+        text-align: center;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .pagination-wrapper {
+        text-align: center;
+        /* Center the pagination for better mobile experience */
+    }
+
+    .page-item {
+        display: block;
+        /* Display pagination items in a block format */
+        margin: 5px 0;
+        /* Add some spacing between items */
+    }
+
+    .page-link {
+        display: block;
+        /* Make page links block level to occupy full width */
+        text-align: center;
+        /* Align text to center */
+    }
+
+    .pagination {
+        justify-content: center;
+        /* Center the pagination items */
+    }
 }
