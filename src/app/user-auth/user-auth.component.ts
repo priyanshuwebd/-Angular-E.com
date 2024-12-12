@@ -14,7 +14,7 @@ export class UserAuthComponent implements OnInit {
   constructor(private user: UserService, private product: ProductService) { }
 
   ngOnInit(): void {
-    console.log("hello")
+    // to check is user logged in already
     this.user.userAuthReload();
   }
 

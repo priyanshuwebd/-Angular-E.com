@@ -10,13 +10,13 @@ import { ProductService } from '../services/product.service';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  productList: product[] = [];
-  currentPage: number = 1;
-  itemsPerPage: number = 10;
-  totalItems: number = 0;
-  paginationArray: number[] = [];
-  searchQuery: string = '';
-  searchQueryChange = new Subject<string>();
+  productList: product[] = [];//hold the list of prod frm api
+  currentPage: number = 1; // track C.P.NO in pagination
+  itemsPerPage: number = 10; // to display perpage for pagination
+  totalItems: number = 0;  //for calculating pagination
+  paginationArray: number[] = []; //  store P.NO for Pagination nevigation
+  searchQuery: string = '';    // current searchquery entered by the user
+  searchQueryChange = new Subject<string>(); //emit changes in searchquery
   apiError: boolean = false; // To track API errors
   visiblePages: number[] = []; // To store pages visible in pagination
   maxVisiblePages: number = 5; // Number of visible pages in pagination
