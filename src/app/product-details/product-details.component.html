@@ -1,4 +1,14 @@
 <div class="row product-details" *ngIf="productData">
+    <!-- Back Arrow and Products Link -->
+    <div class="col-12 back-link">
+        <a routerLink="/" class="back-arrow">
+            <!-- Back Arrow Icon -->
+            <span class="arrow">&larr;</span>
+            <span>Products</span>
+        </a>
+    </div>
+
+    <!-- Product Details Section -->
     <div class="col-sm-6">
         <img class="product-img" src="{{productData.thumbnail}}" alt="">
     </div>
@@ -6,7 +16,9 @@
         <div class="details">
             <h1>{{productData.title}}</h1>
             <h3>Price : {{productData.price}}</h3>
-            <div>Color :<h3 [style.backgroundColor]="productData.color" class="product-color"></h3>
+            <div>
+                Color :
+                <h3 [style.backgroundColor]="productData.color" class="product-color"></h3>
             </div>
             <h6>Category : {{productData.category}}</h6>
             <h6>Description : {{productData.description}}</h6>

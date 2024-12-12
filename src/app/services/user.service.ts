@@ -10,7 +10,9 @@ export class UserService {
   invalidUserAuth = new EventEmitter<boolean>(false)
   constructor(private http: HttpClient, private router: Router) { }
 
+  // taking email and password and also we are stting 30 min so that user logout after taht
   userLogin(data: { email: string; password: string }) {
+    // making payload pass in the body
     const loginPayload = {
       username: data.email,
       password: data.password,
@@ -27,9 +29,11 @@ export class UserService {
           if (result && result.accessToken) {
             localStorage.setItem('accessToken', result.accessToken);
             localStorage.setItem('user', JSON.stringify(result));
+            // navigate to home page
             this.router.navigate(['/']);
             this.invalidUserAuth.emit(false);
           } else {
+            // setting this key invalidUserAuth to show invalid credential
             this.invalidUserAuth.emit(true);
           }
         },

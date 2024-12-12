@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { product } from '../data-type';
 import { ProductService } from '../services/product.service';
 @Component({
   selector: 'app-header',

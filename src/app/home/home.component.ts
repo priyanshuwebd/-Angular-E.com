@@ -17,52 +17,59 @@ export class HomeComponent implements OnInit {
   paginationArray: number[] = [];
   searchQuery: string = '';
   searchQueryChange = new Subject<string>();
+  apiError: boolean = false; // To track API errors
+  visiblePages: number[] = []; // To store pages visible in pagination
+  maxVisiblePages: number = 5; // Number of visible pages in pagination
 
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
+    // hitting the function load product
     this.loadProducts();
 
     // Debounce search query changes
     this.searchQueryChange.pipe(debounceTime(300)).subscribe((query) => {
-      this.currentPage = 1; // Reset to the first page on new search
-      console.log("calling filter products")
-      this.filterProducts();
+      if (query.length >= 4) {
+        this.currentPage = 1; // Reset to the first page on new search
+        this.filterProducts();
+      } else if (query.length === 0) {
+        this.loadProducts(); // Reload original products if the query is cleared
+      }
     });
   }
 
   loadProducts(): void {
-    if (this.searchQuery) {
+    this.apiError = false; // Reset error flag before API call
+    if (this.searchQuery && this.searchQuery.length >= 4) {
       this.filterProducts(); // Perform search with the current query
     } else {
+      // hitting the api to get all products
       this.productService.productList(this.currentPage, this.itemsPerPage).subscribe({
         next: (data) => {
-          console.log("initial data", data)
           this.productList = data.products;
           this.totalItems = data.total;
+          // claculating pagination
           this.updatePagination();
         },
-        error: (err) => {
-          console.error('Error fetching products:', err);
+        error: () => {
+          this.apiError = true; // Set error flag on failure
         },
       });
     }
   }
 
   filterProducts(): void {
-    if (this.searchQuery) {
-      console.log("this.searchQuery", this.searchQuery)
+    this.apiError = false; // Reset error flag before API call
+    if (this.searchQuery.length >= 4) {
       const skip = (this.currentPage - 1) * this.itemsPerPage;
-      console.log("skip", skip)
       this.productService.searchProduct(this.searchQuery, skip, this.itemsPerPage).subscribe({
         next: (data) => {
-          console.log("data", data)
           this.productList = data.products;
-          this.totalItems = data.total; // Update total items for pagination
-          this.updatePagination(); // Recalculate pagination
+          this.totalItems = data.total;
+          this.updatePagination();
         },
-        error: (err) => {
-          console.error('Error searching products:', err);
+        error: () => {
+          this.apiError = true; // Set error flag on failure
         },
       });
     } else {
@@ -71,16 +78,21 @@ export class HomeComponent implements OnInit {
   }
 
   updatePagination(): void {
-    this.paginationArray = Array.from(
-      { length: Math.ceil(this.totalItems / this.itemsPerPage) },
-      (_, i) => i + 1
-    );
+    const totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+  
+    // Adjust visible range
+    const startPage = Math.max(this.currentPage - Math.floor(this.maxVisiblePages / 2), 1);
+    const endPage = Math.min(startPage + this.maxVisiblePages - 1, totalPages);
+  
+    this.paginationArray = Array.from({ length: totalPages }, (_, i) => i + 1);
+    this.visiblePages = this.paginationArray.slice(startPage - 1, endPage);
   }
-
+  
   changePage(page: number): void {
     if (page >= 1 && page <= this.paginationArray.length) {
       this.currentPage = page;
-      if (this.searchQuery) {
+      this.updatePagination();
+      if (this.searchQuery && this.searchQuery.length >= 4) {
         this.filterProducts();
       } else {
         this.loadProducts();
@@ -111,6 +123,11 @@ export class HomeComponent implements OnInit {
   }
 
   onSearchQueryChange(query: string): void {
-    this.searchQueryChange.next(query);
+    this.searchQueryChange.next(query.trim());
+  }
+
+  retry(): void {
+    // Retry the last operation
+    this.loadProducts();
   }
 }

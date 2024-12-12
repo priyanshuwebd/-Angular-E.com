@@ -2,66 +2,102 @@
   <h1>Our Products</h1>
   <div style="margin-bottom: 20px;"></div>
 
-  <!-- Search Bar -->
-  <div class="search-bar">
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Search for products..."
-      [(ngModel)]="searchQuery"
-      (ngModelChange)="onSearchQueryChange($event)"
-    />
+  <!-- Error State with Retry Button -->
+  <div *ngIf="apiError" class="alert alert-danger text-center">
+    <p>Failed to load products. Please try again.</p>
+    <button class="btn btn-primary" (click)="retry()">Retry</button>
   </div>
 
-  <div style="margin-bottom: 40px;"></div>
+  <!-- Content when API is successful -->
+  <div *ngIf="!apiError">
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search for products..."
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearchQueryChange($event)"
+      />
+    </div>
 
-  <!-- Product List -->
-  <div class="row">
-    <div class="col-sm-3" *ngFor="let item of productList">
-      <div class="product-item">
-        <img [src]="item.thumbnail" [alt]="item.title" class="product-image" />
-        <div class="product-details">
-          <h6 class="name-head">{{ item.title }}</h6>
-          <div class="product-price">
-            <h6>Price: {{ item.price | currency }}</h6>
+    <div style="margin-bottom: 40px;"></div>
+
+    <!-- Product List -->
+    <div class="row">
+      <div class="col-sm-3" *ngFor="let item of productList">
+        <div class="product-item">
+          <img [src]="item.thumbnail" [alt]="item.title" class="product-image" />
+          <div class="product-details">
+            <h6 class="name-head">{{ item.title }}</h6>
+            <div class="product-price">
+              <h6>Price: {{ item.price | currency }}</h6>
+            </div>
+            <div class="product-description">
+              <p>{{ item.description }}</p>
+            </div>
           </div>
-          <div class="product-description">
-            <p>{{ item.description }}</p>
+          <div class="product-footer">
+            <a routerLink="/details/{{ item.id }}" class="btn btn-primary">View Details</a>
           </div>
-        </div>
-        <div class="product-footer">
-          <a routerLink="/details/{{ item.id }}" class="btn btn-primary">View Details</a>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Pagination -->
-  <div class="pagination-wrapper">
-    <nav aria-label="Page navigation example">
-      <ul class="pagination justify-content-center">
-        <li class="page-item" [class.disabled]="currentPage === 1">
-          <a class="page-link" href="#" (click)="prevPage(); $event.preventDefault()" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-        <li class="page-item" *ngFor="let page of paginationArray">
-          <a
-            class="page-link"
-            href="#"
-            (click)="changePage(page); $event.preventDefault()"
+    <!-- Pagination -->
+    <div class="pagination-wrapper">
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          <!-- First Page Button -->
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link" href="#" (click)="changePage(1); $event.preventDefault()" aria-label="First">
+              First
+            </a>
+          </li>
+    
+          <!-- Previous Page Button -->
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link" href="#" (click)="prevPage(); $event.preventDefault()" aria-label="Previous">
+              &laquo;
+            </a>
+          </li>
+    
+          <!-- Ellipsis before visible pages -->
+          <li class="page-item disabled" *ngIf="visiblePages[0] > 1">
+            <span class="page-link">...</span>
+          </li>
+    
+          <!-- Dynamic Page Numbers -->
+          <li
+            class="page-item"
+            *ngFor="let page of visiblePages"
             [class.active]="page === currentPage"
           >
-            {{ page }}
-          </a>
-        </li>
-        <li class="page-item" [class.disabled]="currentPage === paginationArray.length">
-          <a class="page-link" href="#" (click)="nextPage(); $event.preventDefault()" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+            <a class="page-link" href="#" (click)="changePage(page); $event.preventDefault()">{{ page }}</a>
+          </li>
+    
+          <!-- Ellipsis after visible pages -->
+          <li class="page-item disabled" *ngIf="visiblePages[visiblePages.length - 1] < paginationArray.length">
+            <span class="page-link">...</span>
+          </li>
+    
+          <!-- Next Page Button -->
+          <li class="page-item" [class.disabled]="currentPage === paginationArray.length">
+            <a class="page-link" href="#" (click)="nextPage(); $event.preventDefault()" aria-label="Next">
+              &raquo;
+            </a>
+          </li>
+    
+          <!-- Last Page Button -->
+          <li class="page-item" [class.disabled]="currentPage === paginationArray.length">
+            <a class="page-link" href="#" (click)="changePage(paginationArray.length); $event.preventDefault()" aria-label="Last">
+              Last
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    
   </div>
 
   <div style="margin-bottom: 100px;"></div>
