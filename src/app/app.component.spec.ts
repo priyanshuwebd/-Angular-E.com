@@ -33,3 +33,5 @@ describe('AppComponent', () => {
     expect(compiled.querySelector('.content span')?.textContent).toContain('ecomm-project app is running!');
   });
 });
+
+
