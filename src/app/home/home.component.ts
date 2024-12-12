@@ -46,6 +46,7 @@ export class HomeComponent implements OnInit {
       // hitting the api to get all products
       this.productService.productList(this.currentPage, this.itemsPerPage).subscribe({
         next: (data) => {
+          console.log('productData:',data)
           this.productList = data.products;
           this.totalItems = data.total;
           // claculating pagination
